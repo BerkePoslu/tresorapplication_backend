@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 /**
- * EmailAdress
+ * EmailAddress
  * @author Peter Rutschmann
  */
 @Getter
