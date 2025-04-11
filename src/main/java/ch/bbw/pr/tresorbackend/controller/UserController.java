@@ -80,13 +80,17 @@ public class UserController {
       //todo ergänzen
       System.out.println("UserController.createUser, password validation passed");
 
+      // Hash the password and print it
+      String hashedPassword = passwordService.hashPassword(registerUser.getPassword());
+      System.out.println("UserController.createUser, password hash: " + hashedPassword);
+
       //transform registerUser to user
       User user = new User(
             null,
             registerUser.getFirstName(),
             registerUser.getLastName(),
             registerUser.getEmail(),
-            passwordService.hashPassword(registerUser.getPassword())
+            hashedPassword
             );
 
       User savedUser = userService.createUser(user);
@@ -176,6 +180,22 @@ public class UserController {
       String json = new Gson().toJson(obj);
       System.out.println("UserController.getUserIdByEmail " + json);
       return ResponseEntity.accepted().body(json);
+   }
+
+   @CrossOrigin(origins = "${CROSS_ORIGIN}")
+   @PostMapping("/hash")
+   public ResponseEntity<String> hashPassword(@RequestBody String password) {
+      System.out.println("UserController.hashPassword: " + password);
+      
+      String hashedPassword = passwordService.hashPassword(password);
+      System.out.println("UserController.hashPassword, hashed: " + hashedPassword);
+      
+      JsonObject obj = new JsonObject();
+      obj.addProperty("original", password);
+      obj.addProperty("hashed", hashedPassword);
+      String json = new Gson().toJson(obj);
+      
+      return ResponseEntity.ok(json);
    }
 
 }

@@ -19,4 +19,5 @@ public interface SecretService {
    void deleteSecret(Long secretId);
 
    List<Secret> getSecretsByUserId(Long userId);
+
 }

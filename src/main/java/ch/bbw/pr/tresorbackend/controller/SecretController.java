@@ -85,9 +85,10 @@ public class SecretController {
          return ResponseEntity.notFound().build();
       }
       //Decrypt content
-      for(Secret secret: secrets) {
+      for (Secret secret : secrets) {
          try {
-            secret.setContent(new EncryptUtil(credentials.getEncryptPassword()).decrypt(secret.getContent()));
+            String decryptedContent = new EncryptUtil(credentials.getEncryptPassword()).decrypt(credentials.getEncryptPassword(), secret.getContent());
+            secret.setContent(decryptedContent);
          } catch (EncryptionOperationNotPossibleException e) {
             System.out.println("SecretController.getSecretsByUserId " + e + " " + secret);
             secret.setContent("not encryptable. Wrong password?");
@@ -112,11 +113,12 @@ public class SecretController {
          return ResponseEntity.notFound().build();
       }
       //Decrypt content
-      for(Secret secret: secrets) {
+      for (Secret secret : secrets) {
          try {
-            secret.setContent(new EncryptUtil(credentials.getEncryptPassword()).decrypt(secret.getContent()));
+            String decryptedContent = new EncryptUtil(credentials.getEncryptPassword()).decrypt(credentials.getEncryptPassword(), secret.getContent());
+            secret.setContent(decryptedContent);
          } catch (EncryptionOperationNotPossibleException e) {
-            System.out.println("SecretController.getSecretsByEmail " + e + " " + secret);
+            System.out.println("SecretController.getSecretsByUserId " + e + " " + secret);
             secret.setContent("not encryptable. Wrong password?");
          }
       }
@@ -182,7 +184,7 @@ public class SecretController {
       }
       //check if Secret can be decrypted with password
       try {
-         new EncryptUtil(newSecret.getEncryptPassword()).decrypt(dbSecrete.getContent());
+         new EncryptUtil(newSecret.getEncryptPassword()).decrypt(newSecret.getEncryptPassword(), dbSecrete.getContent());
       } catch (EncryptionOperationNotPossibleException e) {
          System.out.println("SecretController.updateSecret, invalid password");
          JsonObject obj = new JsonObject();

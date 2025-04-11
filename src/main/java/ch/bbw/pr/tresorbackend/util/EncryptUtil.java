@@ -1,6 +1,5 @@
 package ch.bbw.pr.tresorbackend.util;
-
-import org.jasypt.util.text.AES256TextEncryptor;
+import ch.bbw.pr.tresorbackend.service.PasswordEncryptionService;
 
 /**
  * EncryptUtil
@@ -9,20 +8,20 @@ import org.jasypt.util.text.AES256TextEncryptor;
  * @author Peter Rutschmann
  */
 public class EncryptUtil {
+   PasswordEncryptionService passwordEncryptionService = new PasswordEncryptionService();
 
-   //todo ergänzen!
+   String secretKey;
 
    public EncryptUtil(String secretKey) {
-      //todo ergänzen!
+      this.secretKey = secretKey;
    }
 
    public String encrypt(String data) {
-      //todo anpassen!
+      passwordEncryptionService.hashPassword(data);
       return data;
    }
 
-   public String decrypt(String data) {
-      //todo anpassen!
-      return data;
+   public String decrypt(String data,String  hashedData) {
+      return passwordEncryptionService.compareHashesString(data, hashedData);
    }
 }
