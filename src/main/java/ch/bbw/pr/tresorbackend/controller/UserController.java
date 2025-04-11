@@ -2,6 +2,7 @@ package ch.bbw.pr.tresorbackend.controller;
 
 import ch.bbw.pr.tresorbackend.model.ConfigProperties;
 import ch.bbw.pr.tresorbackend.model.EmailAdress;
+import ch.bbw.pr.tresorbackend.model.LoginCredentials;
 import ch.bbw.pr.tresorbackend.model.RegisterUser;
 import ch.bbw.pr.tresorbackend.model.User;
 import ch.bbw.pr.tresorbackend.service.PasswordEncryptionService;
@@ -196,6 +197,37 @@ public class UserController {
       String json = new Gson().toJson(obj);
       
       return ResponseEntity.ok(json);
+   }
+
+   @CrossOrigin(origins = "${CROSS_ORIGIN}")
+   @PostMapping("/login")
+   public ResponseEntity<String> login(@RequestBody LoginCredentials credentials) {
+      System.out.println("UserController.login: " + credentials.getEmail());
+      
+      User user = userService.findByEmail(credentials.getEmail());
+      if (user == null) {
+         System.out.println("UserController.login: user not found");
+         JsonObject obj = new JsonObject();
+         obj.addProperty("message", "Invalid email or password");
+         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Gson().toJson(obj));
+      }
+
+      boolean isValidPassword = passwordService.verifyPassword(credentials.getPassword(), user.getPassword());
+      System.out.println("UserController.login: password valid: " + isValidPassword);
+      
+      if (!isValidPassword) {
+         JsonObject obj = new JsonObject();
+         obj.addProperty("message", "Invalid email or password");
+         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Gson().toJson(obj));
+      }
+
+      JsonObject obj = new JsonObject();
+      obj.addProperty("message", "Login successful");
+      obj.addProperty("userId", user.getId());
+      obj.addProperty("firstName", user.getFirstName());
+      obj.addProperty("lastName", user.getLastName());
+      obj.addProperty("email", user.getEmail());
+      return ResponseEntity.ok(new Gson().toJson(obj));
    }
 
 }
