@@ -5,19 +5,15 @@ import java.util.List;
 
 /**
  * SecretService
+ * Interface for secret management operations
  * @author Peter Rutschmann
  */
 public interface SecretService {
-   Secret createSecret(Secret secret);
-
-   Secret getSecretById(Long secretId);
-
-   List<Secret> getAllSecrets();
-
-   Secret updateSecret(Secret secret);
-
-   void deleteSecret(Long secretId);
-
-   List<Secret> getSecretsByUserId(Long userId);
-
+    List<Secret> getSecretsByEmail(String email);
+    Secret createSecret(Secret secret);
+    Secret updateSecret(Long id, Secret secret);
+    void deleteSecret(Long id);
+    Secret getSecretById(Long secretId);
+    List<Secret> getAllSecrets();
+    List<Secret> getSecretsByUserId(Long userId);
 }

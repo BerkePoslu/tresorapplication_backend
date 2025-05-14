@@ -23,6 +23,7 @@ public class Secret {
    @Column(nullable = false, name="user_id")
    private Long userId;
 
-   @Column(nullable = false, name="content")
+   @Column(nullable = false, name="content", columnDefinition = "json")
+   @JsonRawValue
    private String content;
 }
